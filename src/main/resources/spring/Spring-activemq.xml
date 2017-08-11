@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
+
+    <!--
+        生产者的ConnectionFactory
+        连接的是activemq-b, activemq-c三台服务器
+        activemq-a 作为broker共享b和c的数据
+        b和c则是master/slaver模式
+    -->
+    <bean id="producerConnectionFactory" class="org.apache.activemq.spring.ActiveMQConnectionFactory">
+        <property name="brokerURL" value="failover:(tcp://192.168.111.128:61617,
+        tcp://192.168.111.128:61618)?randomize=true" />
+    </bean>
+
+    <!--
+        消费者的ConnectionFactory
+        连接的是activemq-a, activemq-b, activemq-c三台服务器
+    -->
+    <bean id="consumerConnectionFactory" class="org.apache.activemq.spring.ActiveMQConnectionFactory">
+        <property name="brokerURL" value="failover:(tcp://192.168.111.128:61616,tcp://192.168.111.128:61617,
+        tcp://192.168.111.128:61618)?randomize=true" />
+    </bean>
+</beans>
